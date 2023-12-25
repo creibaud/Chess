@@ -2,6 +2,7 @@ import pygame
 import settings.main as settings
 from tools.text import Text
 from tools.button import Button
+from tools.inputText import InputText
 from connection.client.client import Client
 
 class Screen:
@@ -51,6 +52,8 @@ class Screen:
         fontLogo = pygame.font.SysFont("Arial", 100)
         logoText = Text(self.screen, self.screen.get_width() / 2 - (fontLogo.size(textLogo)[0] / 2), self.screen.get_height() / 2 - (fontLogo.size(textLogo)[1] / 2) + 40, textLogo, settings.colors.WHITE, fontLogo)
 
+        usernameInput = InputText(self.screen, self.screen.get_width() / 2 - 100, self.screen.get_height() / 2 - 100, 200, 50, settings.colors.WHITE, settings.colors.GREEN, settings.colors.DARK_GREEN, pygame.font.SysFont("Arial", 30))
+
         while self.homeRun or self.clientSettings:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -59,6 +62,10 @@ class Screen:
                 
                 if self.homeRun:
                     startClientSettingsButton.handleClick(event)
+
+                if self.clientSettings:
+                    usernameInput.handleClick(event)
+                    usernameInput.handleKey(event)
         
             self.screen.fill(settings.colors.GRAY)
 
@@ -72,6 +79,9 @@ class Screen:
             if self.clientSettings:
                 startGameButton.handleHover()
                 startGameButton.draw()
+
+                usernameInput.handleHover()
+                usernameInput.draw()
 
             pygame.display.update()
             self.clock.tick(settings.screen.FPS)

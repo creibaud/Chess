@@ -10,7 +10,7 @@ class InputText:
         self.height = height
         self.color = color
         self.activeColor = activeColor
-        self.actualText = Text("", textColor, font)
+        self.actualText = Text(self.screen, x, y, "ZZ", textColor, font)
         self.active = False
 
     def handleClick(self, event):
@@ -41,4 +41,4 @@ class InputText:
         else:
             pygame.draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
         
-        self.actualText.draw(self.screen, self.x + (self.width / 2) - (self.actualText.font.size(self.actualText.text)[0] / 2), self.y + (self.height / 2) - (self.actualText.font.size(self.actualText.text)[1] / 2) + 2)
+        self.actualText.draw()
