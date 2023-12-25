@@ -1,5 +1,7 @@
 WHITE = (255, 255, 255)
 RED = (225, 0, 0)
 DARK_RED = (200, 0, 0)
+GREEN = (0, 225, 0)
+DARK_GREEN = (0, 200, 0)
 GRAY = (48, 46, 43)
 DARK_GRAY = (38, 37, 34)

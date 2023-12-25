@@ -2,6 +2,7 @@ import pygame
 import settings.main as settings
 from tools.text import Text
 from tools.button import Button
+from connection.client.client import Client
 
 class Screen:
     def __init__(self):
@@ -17,37 +18,60 @@ class Screen:
 
         self.homeRun = True
         self.gameRun = False
+        self.clientSettings = False
+
+        self.host = "localhost"
+        self.port = 3000
+        self.client = Client(self.host, self.port)
 
     def startGame(self):
         self.homeRun = False
+        self.clientSettings = False
         self.gameRun = True
+        self.client.host = self.host
+        self.client.port = self.port
+        self.client.start()
+
+    def startClientSettings(self):
+        self.homeRun = False
+        self.clientSettings = True
+        self.gameRun = False
 
     def returnToHome(self):
         self.gameRun = False
+        self.clientSettings = False
         self.homeRun = True
 
     def homeScreen(self):
         self.screen = pygame.display.set_mode((settings.screen.WIDTH, settings.screen.HEIGHT))
-        startGameButton = Button(self.screen, self.screen.get_width() / 2 - 100, self.screen.get_height() / 2 + 100, 200, 75, settings.colors.GRAY, settings.colors.DARK_GRAY, "START", settings.colors.WHITE, pygame.font.SysFont("Arial", 30), self.startGame)
+        startClientSettingsButton = Button(self.screen, self.screen.get_width() / 2 - 100, self.screen.get_height() / 2 + 100, 200, 75, settings.colors.GRAY, settings.colors.DARK_GRAY, "START", settings.colors.WHITE, pygame.font.SysFont("Arial", 30), self.startClientSettings)
+        startGameButton = Button(self.screen, self.screen.get_width() / 2 - 100, self.screen.get_height() / 2 + 100, 200, 75, settings.colors.GREEN, settings.colors.DARK_GREEN, "PLAY", settings.colors.DARK_GRAY, pygame.font.SysFont("Arial", 30), self.startGame)
 
         textLogo = "CHESS"
         fontLogo = pygame.font.SysFont("Arial", 100)
         logoText = Text(self.screen, self.screen.get_width() / 2 - (fontLogo.size(textLogo)[0] / 2), self.screen.get_height() / 2 - (fontLogo.size(textLogo)[1] / 2) + 40, textLogo, settings.colors.WHITE, fontLogo)
 
-        while self.homeRun:
+        while self.homeRun or self.clientSettings:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.homeRun = False
+                    self.clientSettings = False
                 
-                startGameButton.handleClick(event)
+                if self.homeRun:
+                    startClientSettingsButton.handleClick(event)
         
             self.screen.fill(settings.colors.GRAY)
 
-            self.screen.blit(self.icon, (0, 0))
-            logoText.draw()
+            if self.homeRun:
+                self.screen.blit(self.icon, (0, 0))
+                logoText.draw()
 
-            startGameButton.handleHover()
-            startGameButton.draw()
+                startClientSettingsButton.handleHover()
+                startClientSettingsButton.draw()
+
+            if self.clientSettings:
+                startGameButton.handleHover()
+                startGameButton.draw()
 
             pygame.display.update()
             self.clock.tick(settings.screen.FPS)
@@ -72,7 +96,7 @@ class Screen:
             self.clock.tick(settings.screen.FPS)
     
     def run(self):
-        while self.homeRun or self.gameRun:
+        while self.homeRun or self.clientSettings or self.gameRun:
             if self.homeRun:
                 self.homeScreen()
 
