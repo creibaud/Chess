@@ -1,0 +1,4 @@
+FPS = 60
+
+WIDTH = 512
+HEIGHT = 512
