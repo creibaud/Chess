@@ -1,7 +1,7 @@
 import pygame
 
 class Cell:
-    def __init__(self, screen, x, y, width, height, position, color, borderTopLeft=-1, borderTopRight=-1, borderBottomLeft=-1, borderBottomRight=-1):
+    def __init__(self, screen, x, y, width, height, position, color):
         self.screen = screen
         self.x = x
         self.y = y
@@ -10,10 +10,10 @@ class Cell:
         self.rect = pygame.Rect(x, y, width, height)
         self.position = position
         self.color = color
-        self.borderTopLeft = borderTopLeft
-        self.borderTopRight = borderTopRight
-        self.borderBottomLeft = borderBottomLeft
-        self.borderBottomRight = borderBottomRight
+        self.borderTopLeft = -1
+        self.borderTopRight = -1
+        self.borderBottomLeft = -1
+        self.borderBottomRight = -1
         self.piece = None
 
     def isEmpty(self):

@@ -22,6 +22,16 @@ class Board:
             self.cells.append([])
             for col in range(len(gridPositions[row])):
                 cell = Cell(self.screen, self.rect.x + col * cellSize, self.rect.y + row * cellSize, cellSize, cellSize, gridPositions[row][col], cellColor)
+                
+                if row == 0 and col == 0:
+                    cell.borderTopLeft = 5
+                elif row == 0 and col == 7:
+                    cell.borderTopRight = 5
+                elif row == 7 and col == 0:
+                    cell.borderBottomLeft = 5
+                elif row == 7 and col == 7:
+                    cell.borderBottomRight = 5
+
                 self.cells[row].append(cell)
                 cellColor = colors.WHITE if cellColor == colors.BLACK else colors.BLACK
             cellColor = colors.WHITE if cellColor == colors.BLACK else colors.BLACK
@@ -55,7 +65,7 @@ class Board:
         self.cellResize()
     
     def draw(self):
-        pygame.draw.rect(self.screen, colors.GRAY, self.rect)
+        pygame.draw.rect(self.screen, colors.GRAY, self.rect, border_radius=5)
 
         textColor = colors.BLACK
         for row in range(len(self.cells)):
