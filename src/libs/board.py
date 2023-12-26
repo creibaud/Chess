@@ -2,6 +2,7 @@ import pygame
 import src.includes.colors as colors
 import src.includes.grid as grid
 from src.libs.cell import Cell
+from src.tools.text import Text
 
 class Board:
     def __init__(self, screen, color):
@@ -48,7 +49,7 @@ class Board:
                 self.cells[row][col].width = cellSize
                 self.cells[row][col].height = cellSize
                 self.cells[row][col].rect = pygame.Rect(self.cells[row][col].x, self.cells[row][col].y, self.cells[row][col].width, self.cells[row][col].height)
-    
+
     def update(self):
         self.rectResize()
         self.cellResize()
@@ -56,6 +57,27 @@ class Board:
     def draw(self):
         pygame.draw.rect(self.screen, colors.GRAY, self.rect)
 
+        textColor = colors.BLACK
         for row in range(len(self.cells)):
             for col in range(len(self.cells[row])):
                 self.cells[row][col].draw()
+                cellSize = self.cells[row][col].width
+
+                if row == len(self.cells) - 1 or row == len(self.cells) - 1 and col == 0:
+                    text = Text(self.screen, self.cells[row][col].position[0], 0, 0, "assets/fonts/roboto/Roboto-Regular.ttf", int(0.18 * cellSize), textColor)
+                    text.x = self.cells[row][col].x + cellSize * 0.95 - text.text.get_width()
+                    text.y = self.cells[row][col].y + cellSize * 0.98 - text.text.get_height()
+                    text.rect.x = text.x
+                    text.rect.y = text.y
+                    text.draw()
+                    
+                if col == 0:
+                    text = Text(self.screen, self.cells[row][col].position[1], 0, 0, "assets/fonts/roboto/Roboto-Regular.ttf", int(0.18 * cellSize), textColor)
+                    text.x = self.cells[row][col].x + cellSize * 0.05
+                    text.y = self.cells[row][col].y + cellSize * 0.05
+                    text.rect.x = text.x
+                    text.rect.y = text.y
+                    text.draw()
+                    
+                textColor = colors.WHITE if textColor == colors.BLACK else colors.BLACK
+            textColor = colors.WHITE if textColor == colors.BLACK else colors.BLACK
