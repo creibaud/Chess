@@ -10,6 +10,6 @@ pygame.display.set_caption("Chess")
 icon = pygame.image.load("assets/icon.png")
 pygame.display.set_icon(icon)
 
-gameScreen = GameScreen(screen, clock)
+gameScreen = GameScreen(screen, clock, "white")
 gameScreen.start()
 gameScreen.stop()

@@ -49,7 +49,7 @@ class Board:
         self.rect.centerx = width / 2
         self.rect.centery = height / 2
 
-    def cellResize(self):
+    def cellsResize(self):
         cellSize = self.rect.width / 8
 
         for row in range(len(self.cells)):
@@ -59,10 +59,6 @@ class Board:
                 self.cells[row][col].width = cellSize
                 self.cells[row][col].height = cellSize
                 self.cells[row][col].rect = pygame.Rect(self.cells[row][col].x, self.cells[row][col].y, self.cells[row][col].width, self.cells[row][col].height)
-
-    def update(self):
-        self.rectResize()
-        self.cellResize()
     
     def draw(self):
         pygame.draw.rect(self.screen, colors.GRAY, self.rect, border_radius=5)
