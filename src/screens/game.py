@@ -16,6 +16,8 @@ class GameScreen:
                 if event.type == pygame.QUIT:
                     self.run = False
 
+                self.game.selectPiece(event)
+
             self.screen.fill(colors.GRAY)
 
             self.game.handleResize()

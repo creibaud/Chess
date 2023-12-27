@@ -8,11 +8,14 @@ class Piece:
         self.position = position
         self.rect = self.img.get_rect()
 
-    def positionPiece(self, cells):
+    def getCell(self, cells):
         for row in range(len(cells)):
             for col in range(len(cells[row])):
                 if cells[row][col].position == self.position:
-                    self.rect.center = cells[row][col].rect.center
+                    return cells[row][col]
+                
+    def positionPiece(self, cells):
+        self.rect.center = self.getCell(cells).rect.center
 
     def draw(self):
         self.screen.blit(self.img, self.rect)
