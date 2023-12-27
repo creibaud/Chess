@@ -1,11 +1,12 @@
 import pygame
 
 class Piece:
-    def __init__(self, screen, path, position):
+    def __init__(self, screen, path, position, color):
         self.screen = screen
         self.path = path
         self.img = pygame.image.load(self.path)
         self.position = position
+        self.color = color
         self.rect = self.img.get_rect()
 
     def getCell(self, cells):

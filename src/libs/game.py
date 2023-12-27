@@ -22,30 +22,30 @@ class Game:
         self.whitePieces = []
 
         for i in range(8):
-            self.whitePieces.append(Pawn(self.screen, "assets/pieces/white/pawn.png", chr(97 + i) + "2"))
+            self.whitePieces.append(Pawn(self.screen, chr(97 + i) + "2", "white"))
 
-        self.whitePieces.append(Rook(self.screen, "assets/pieces/white/rook.png", "a1"))
-        self.whitePieces.append(Knight(self.screen, "assets/pieces/white/knight.png", "b1"))
-        self.whitePieces.append(Bishop(self.screen, "assets/pieces/white/bishop.png", "c1"))
-        self.whitePieces.append(Queen(self.screen, "assets/pieces/white/queen.png", "d1"))
-        self.whitePieces.append(King(self.screen, "assets/pieces/white/king.png", "e1"))
-        self.whitePieces.append(Bishop(self.screen, "assets/pieces/white/bishop.png", "f1"))
-        self.whitePieces.append(Knight(self.screen, "assets/pieces/white/knight.png", "g1"))
-        self.whitePieces.append(Rook(self.screen, "assets/pieces/white/rook.png", "h1"))
+        self.whitePieces.append(Rook(self.screen, "a1", "white"))
+        self.whitePieces.append(Knight(self.screen, "b1", "white"))
+        self.whitePieces.append(Bishop(self.screen, "c1", "white"))
+        self.whitePieces.append(Queen(self.screen, "d1", "white"))
+        self.whitePieces.append(King(self.screen, "e1", "white"))
+        self.whitePieces.append(Bishop(self.screen, "f1", "white"))
+        self.whitePieces.append(Knight(self.screen, "g1", "white"))
+        self.whitePieces.append(Rook(self.screen, "h1", "white"))
         
         self.blackPieces = []
 
         for i in range(8):
-            self.blackPieces.append(Pawn(self.screen, "assets/pieces/black/pawn.png", chr(97 + i) + "7"))
+            self.blackPieces.append(Pawn(self.screen, chr(97 + i) + "7", "black"))
 
-        self.blackPieces.append(Rook(self.screen, "assets/pieces/black/rook.png", "a8"))
-        self.blackPieces.append(Knight(self.screen, "assets/pieces/black/knight.png", "b8"))
-        self.blackPieces.append(Bishop(self.screen, "assets/pieces/black/bishop.png", "c8"))
-        self.blackPieces.append(Queen(self.screen, "assets/pieces/black/queen.png", "d8"))
-        self.blackPieces.append(King(self.screen, "assets/pieces/black/king.png", "e8"))
-        self.blackPieces.append(Bishop(self.screen, "assets/pieces/black/bishop.png", "f8"))
-        self.blackPieces.append(Knight(self.screen, "assets/pieces/black/knight.png", "g8"))
-        self.blackPieces.append(Rook(self.screen, "assets/pieces/black/rook.png", "h8"))
+        self.blackPieces.append(Rook(self.screen, "a8", "black"))
+        self.blackPieces.append(Knight(self.screen, "b8", "black"))
+        self.blackPieces.append(Bishop(self.screen, "c8", "black"))
+        self.blackPieces.append(Queen(self.screen, "d8", "black"))
+        self.blackPieces.append(King(self.screen, "e8", "black"))
+        self.blackPieces.append(Bishop(self.screen, "f8", "black"))
+        self.blackPieces.append(Knight(self.screen, "g8", "black"))
+        self.blackPieces.append(Rook(self.screen, "h8", "black"))
 
         self.pieces.append(self.whitePieces)
         self.pieces.append(self.blackPieces)
