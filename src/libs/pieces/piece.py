@@ -1,8 +1,9 @@
 import pygame
 
 class Piece:
-    def __init__(self, screen, path, position, color):
+    def __init__(self, screen, name, path, position, color):
         self.screen = screen
+        self.name = name
         self.path = path
         self.img = pygame.image.load(self.path)
         self.position = position

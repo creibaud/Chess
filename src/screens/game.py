@@ -17,6 +17,7 @@ class GameScreen:
                     self.run = False
 
                 self.game.selectPiece(event)
+                self.game.movePiece(event)
 
             self.screen.fill(colors.GRAY)
 

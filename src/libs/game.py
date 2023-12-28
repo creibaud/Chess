@@ -36,7 +36,7 @@ class Game:
         self.blackPieces = []
 
         for i in range(8):
-            self.blackPieces.append(Pawn(self.screen, chr(97 + i) + "3", "black"))
+            self.blackPieces.append(Pawn(self.screen, chr(97 + i) + "7", "black"))
 
         self.blackPieces.append(Rook(self.screen, "a8", "black"))
         self.blackPieces.append(Knight(self.screen, "b8", "black"))
@@ -72,14 +72,41 @@ class Game:
         for piece in actualPieces:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if piece.rect.collidepoint(mousePos):
-                    self.pieceSelected = piece
-                    piece.getCell(self.board.cells).active = True
-                    self.pieceSelected.setPossibleMoves(self.pieces)
-                    self.pieceSelected.setAttackMoves(self.pieces)
-                    print(self.pieceSelected.possibleMoves)
-                    print(self.pieceSelected.attackMoves)
+                    if self.pieceSelected == piece:
+                        self.pieceSelected = None
+                        piece.getCell(self.board.cells).active = False
+                    else:
+                        self.pieceSelected = piece
+                        piece.getCell(self.board.cells).active = True
+                        self.pieceSelected.setPossibleMoves(self.pieces)
+                        self.pieceSelected.setAttackMoves(self.pieces)
                 else:
                     piece.getCell(self.board.cells).active = False
+    
+    def movePiece(self, event):
+        mousePos = pygame.mouse.get_pos()
+        
+        for row in range(len(self.board.cells)):
+            for col in range(len(self.board.cells[row])):
+                cell = self.board.cells[row][col]
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    if cell.rect.collidepoint(mousePos) and self.pieceSelected is not None:
+                        if cell.position in self.pieceSelected.possibleMoves:
+                            self.pieceSelected.position = cell.position
+                            if self.pieceSelected.name == "Pawn" and self.pieceSelected.isFirstMove:
+                                self.pieceSelected.isFirstMove = False
+
+                            self.pieceSelected = None
+                        elif cell.position in self.pieceSelected.attackMoves:
+                            for colorTeam in self.pieces:
+                                for piece in colorTeam:
+                                    if piece.position == cell.position:
+                                        colorTeam.remove(piece)
+                                        break
+                            self.pieceSelected.position = cell.position
+                            self.pieceSelected = None
+                        elif cell.position not in self.pieceSelected.possibleMoves and cell.position not in self.pieceSelected.attackMoves and cell.position != self.pieceSelected.position:
+                            self.pieceSelected = None
 
     def update(self):
         for colorTeam in self.pieces:

@@ -2,30 +2,34 @@ from src.libs.pieces.piece import Piece
 
 class Pawn(Piece):
     def __init__(self, screen, position, color):
-        super().__init__(screen, f"assets/pieces/{color}/pawn.png", position, color)
+        super().__init__(screen, "Pawn", f"assets/pieces/{color}/pawn.png", position, color)
         self.isFirstMove = True
     
     def setPossibleMoves(self, pieces):
         self.possibleMoves = []
 
         if self.color == "white":
-            if self.isFirstMove:
-                move = self.position[0]+ str(int(self.position[1]) + 2)
-                if self.moveIsPossible(move, pieces):
-                    self.possibleMoves.append(move)
-
             move = self.position[0]+ str(int(self.position[1]) + 1)
-            if self.moveIsPossible(move, pieces):
-                self.possibleMoves.append(move)
-        else:
-            if self.isFirstMove:
-                move = self.position[0]+ str(int(self.position[1]) - 2)
-                if self.moveIsPossible(move, pieces):
-                    self.possibleMoves.append(move)
 
-            move = self.position[0]+ str(int(self.position[1]) - 1)
             if self.moveIsPossible(move, pieces):
                 self.possibleMoves.append(move)
+
+                if self.isFirstMove:
+                    move = self.position[0]+ str(int(self.position[1]) + 2)
+                    
+                    if self.moveIsPossible(move, pieces):
+                        self.possibleMoves.append(move)
+        else:
+            move = self.position[0]+ str(int(self.position[1]) - 1)
+
+            if self.moveIsPossible(move, pieces):
+                self.possibleMoves.append(move)
+
+                if self.isFirstMove:
+                    move = self.position[0]+ str(int(self.position[1]) - 2)
+
+                    if self.moveIsPossible(move, pieces):
+                        self.possibleMoves.append(move)
 
     def setAttackMoves(self, pieces):
         self.attackMoves = []
