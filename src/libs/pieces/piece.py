@@ -8,6 +8,8 @@ class Piece:
         self.position = position
         self.color = color
         self.rect = self.img.get_rect()
+        self.possibleMoves = []
+        self.attackMoves = []
 
     def getCell(self, cells):
         for row in range(len(cells)):
@@ -17,6 +19,18 @@ class Piece:
                 
     def positionPiece(self, cells):
         self.rect.center = self.getCell(cells).rect.center
+
+    def setPossibleMoves(self, pieces):
+        pass
+
+    def setAttackMoves(self, pieces):
+        pass
+
+    def moveIsPossible(self, move, pieces):
+        pass
+
+    def movIsAttackable(self, move, pieces):
+        pass
 
     def draw(self):
         self.screen.blit(self.img, self.rect)

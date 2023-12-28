@@ -60,6 +60,12 @@ class Board:
                 self.cells[row][col].height = cellSize
                 self.cells[row][col].rect = pygame.Rect(self.cells[row][col].x, self.cells[row][col].y, self.cells[row][col].width, self.cells[row][col].height)
     
+    def drawPossibleMoves(self, possibleMoves):
+        for row in range(len(self.cells)):
+            for col in range(len(self.cells[row])):
+                if self.cells[row][col].position in possibleMoves:
+                    self.cells[row][col].drawPossibleMove()
+    
     def draw(self):
         pygame.draw.rect(self.screen, colors.GRAY, self.rect, border_radius=5)
 

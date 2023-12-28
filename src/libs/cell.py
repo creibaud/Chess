@@ -2,7 +2,7 @@ import pygame
 import src.includes.colors as colors
 
 class Cell:
-    def __init__(self, screen, x, y, width, height, position, color, active=False, solutionMove=False):
+    def __init__(self, screen, x, y, width, height, position, color, active=False):
         self.screen = screen
         self.x = x
         self.y = y
@@ -13,15 +13,13 @@ class Cell:
         self.color = color
         self.activeColor = colors.WHITE_SELECTED if self.color == colors.WHITE else colors.BLACK_SELECTED
         self.active = active
-        self.solutionMove = solutionMove
         self.borderTopLeft = -1
         self.borderTopRight = -1
         self.borderBottomLeft = -1
         self.borderBottomRight = -1
-    
-    def drawSolutionMove(self):
-        if self.solutionMove:
-            pygame.draw.circle(self.screen, colors.GRAY, self.rect.center, self.rect.width * 0.2)
+
+    def drawPossibleMove(self):
+        pygame.draw.circle(self.screen, colors.GREEN, self.rect.center, self.rect.width * 0.2)
     
     def draw(self):
         if self.active:

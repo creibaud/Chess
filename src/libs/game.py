@@ -16,6 +16,7 @@ class Game:
         self.whitePieces = []
         self.blackPieces = []
         self.initPieces()
+        self.showPossibleMoves = False
 
     def initPieces(self):
         self.pieces = []
@@ -74,8 +75,11 @@ class Game:
                 if piece.rect.collidepoint(mousePos):
                     self.pieceSelected = piece
                     piece.getCell(self.board.cells).active = True
+                    self.showPossibleMoves = True
+                    self.pieceSelected.setPossibleMoves(self.pieces)
                 else:
                     piece.getCell(self.board.cells).active = False
+                    self.showPossibleMoves = False
 
     def update(self):
         for colorTeam in self.pieces:
@@ -88,3 +92,6 @@ class Game:
         for colorTeam in self.pieces:
             for piece in colorTeam:
                 piece.draw()
+
+        if self.showPossibleMoves:
+            self.board.drawPossibleMoves(self.pieceSelected.possibleMoves)
