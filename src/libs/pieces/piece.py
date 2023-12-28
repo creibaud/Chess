@@ -21,6 +21,9 @@ class Piece:
     def positionPiece(self, cells):
         self.rect.center = self.getCell(cells).rect.center
 
+    def directions(self, pieces, function, liste):
+        pass
+
     def setPossibleMoves(self, pieces):
         pass
 
