@@ -19,7 +19,16 @@ class Cell:
         self.borderBottomRight = -1
 
     def drawPossibleMove(self):
-        pygame.draw.circle(self.screen, colors.GREEN, self.rect.center, self.rect.width * 0.2)
+        if self.color == colors.WHITE:
+            pygame.draw.circle(self.screen, colors.WHITE_POSSIBLE, self.rect.center, self.rect.width * 0.15)
+        else:
+            pygame.draw.circle(self.screen, colors.BLACK_POSSIBLE, self.rect.center, self.rect.width * 0.15)
+    
+    def drawAttackMove(self):
+        if self.color == colors.WHITE:
+            pygame.draw.circle(self.screen, colors.WHITE_POSSIBLE, self.rect.center, self.rect.width // 2, int(self.rect.width * 0.1))
+        else:
+            pygame.draw.circle(self.screen, colors.BLACK_POSSIBLE, self.rect.center, self.rect.width // 2, int(self.rect.width * 0.1))
     
     def draw(self):
         if self.active:

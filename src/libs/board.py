@@ -22,7 +22,6 @@ class Board:
             self.cells.append([])
             for col in range(len(gridPositions[row])):
                 cell = Cell(self.screen, self.rect.x + col * cellSize, self.rect.y + row * cellSize, cellSize, cellSize, gridPositions[row][col], cellColor)
-                
                 if row == 0 and col == 0:
                     cell.borderTopLeft = 5
                 elif row == 0 and col == 7:
@@ -54,17 +53,26 @@ class Board:
 
         for row in range(len(self.cells)):
             for col in range(len(self.cells[row])):
-                self.cells[row][col].x = self.rect.x + col * cellSize
-                self.cells[row][col].y = self.rect.y + row * cellSize
-                self.cells[row][col].width = cellSize
-                self.cells[row][col].height = cellSize
-                self.cells[row][col].rect = pygame.Rect(self.cells[row][col].x, self.cells[row][col].y, self.cells[row][col].width, self.cells[row][col].height)
+                cell = self.cells[row][col]
+                cell.x = self.rect.x + col * cellSize
+                cell.y = self.rect.y + row * cellSize
+                cell.width = cellSize
+                cell.height = cellSize
+                cell.rect = pygame.Rect(cell.x, cell.y, cell.width, cell.height)
     
     def drawPossibleMoves(self, possibleMoves):
         for row in range(len(self.cells)):
             for col in range(len(self.cells[row])):
-                if self.cells[row][col].position in possibleMoves:
-                    self.cells[row][col].drawPossibleMove()
+                cell = self.cells[row][col]
+                if cell.position in possibleMoves:
+                    cell.drawPossibleMove()
+
+    def drawAttackMoves(self, attackMoves):
+        for row in range(len(self.cells)):
+            for col in range(len(self.cells[row])):
+                cell = self.cells[row][col]
+                if cell.position in attackMoves:
+                    cell.drawAttackMove()
     
     def draw(self):
         pygame.draw.rect(self.screen, colors.GRAY, self.rect, border_radius=5)
@@ -72,21 +80,22 @@ class Board:
         textColor = colors.BLACK
         for row in range(len(self.cells)):
             for col in range(len(self.cells[row])):
-                self.cells[row][col].draw()
-                cellSize = self.cells[row][col].width
+                cell = self.cells[row][col]
+                cell.draw()
+                cellSize = cell.width
 
                 if row == len(self.cells) - 1 or row == len(self.cells) - 1 and col == 0:
-                    text = Text(self.screen, self.cells[row][col].position[0], 0, 0, "assets/fonts/roboto/Roboto-Regular.ttf", int(0.18 * cellSize), textColor)
-                    text.x = self.cells[row][col].x + cellSize * 0.95 - text.text.get_width()
-                    text.y = self.cells[row][col].y + cellSize * 0.98 - text.text.get_height()
+                    text = Text(self.screen, cell.position[0], 0, 0, "assets/fonts/roboto/Roboto-Regular.ttf", int(0.18 * cellSize), textColor)
+                    text.x = cell.x + cellSize * 0.95 - text.text.get_width()
+                    text.y = cell.y + cellSize * 0.98 - text.text.get_height()
                     text.rect.x = text.x
                     text.rect.y = text.y
                     text.draw()
                     
                 if col == 0:
-                    text = Text(self.screen, self.cells[row][col].position[1], 0, 0, "assets/fonts/roboto/Roboto-Regular.ttf", int(0.18 * cellSize), textColor)
-                    text.x = self.cells[row][col].x + cellSize * 0.05
-                    text.y = self.cells[row][col].y + cellSize * 0.05
+                    text = Text(self.screen, cell.position[1], 0, 0, "assets/fonts/roboto/Roboto-Regular.ttf", int(0.18 * cellSize), textColor)
+                    text.x = cell.x + cellSize * 0.05
+                    text.y = cell.y + cellSize * 0.05
                     text.rect.x = text.x
                     text.rect.y = text.y
                     text.draw()

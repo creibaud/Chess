@@ -16,7 +16,6 @@ class Game:
         self.whitePieces = []
         self.blackPieces = []
         self.initPieces()
-        self.showPossibleMoves = False
 
     def initPieces(self):
         self.pieces = []
@@ -37,7 +36,7 @@ class Game:
         self.blackPieces = []
 
         for i in range(8):
-            self.blackPieces.append(Pawn(self.screen, chr(97 + i) + "7", "black"))
+            self.blackPieces.append(Pawn(self.screen, chr(97 + i) + "3", "black"))
 
         self.blackPieces.append(Rook(self.screen, "a8", "black"))
         self.blackPieces.append(Knight(self.screen, "b8", "black"))
@@ -75,11 +74,12 @@ class Game:
                 if piece.rect.collidepoint(mousePos):
                     self.pieceSelected = piece
                     piece.getCell(self.board.cells).active = True
-                    self.showPossibleMoves = True
                     self.pieceSelected.setPossibleMoves(self.pieces)
+                    self.pieceSelected.setAttackMoves(self.pieces)
+                    print(self.pieceSelected.possibleMoves)
+                    print(self.pieceSelected.attackMoves)
                 else:
                     piece.getCell(self.board.cells).active = False
-                    self.showPossibleMoves = False
 
     def update(self):
         for colorTeam in self.pieces:
@@ -89,9 +89,12 @@ class Game:
     def draw(self):
         self.board.draw()
 
+        if self.pieceSelected is not None and len(self.pieceSelected.possibleMoves) > 0:
+            self.board.drawPossibleMoves(self.pieceSelected.possibleMoves)
+
+        if self.pieceSelected is not None and len(self.pieceSelected.attackMoves) > 0:
+            self.board.drawAttackMoves(self.pieceSelected.attackMoves)
+
         for colorTeam in self.pieces:
             for piece in colorTeam:
                 piece.draw()
-
-        if self.showPossibleMoves:
-            self.board.drawPossibleMoves(self.pieceSelected.possibleMoves)
