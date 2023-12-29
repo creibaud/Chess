@@ -1,7 +1,7 @@
 import pygame
 
 class Piece:
-    def __init__(self, screen, name, path, position, color):
+    def __init__(self, screen, name, path, position, color, id):
         self.screen = screen
         self.name = name
         self.path = path
@@ -9,6 +9,7 @@ class Piece:
         self.position = position
         self.color = color
         self.rect = self.img.get_rect()
+        self.id = id
         self.possibleMoves = []
         self.attackMoves = []
 

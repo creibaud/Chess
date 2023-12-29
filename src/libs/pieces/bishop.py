@@ -1,8 +1,8 @@
 from src.libs.pieces.piece import Piece
 
 class Bishop(Piece):
-    def __init__(self, screen, position, color):
-        super().__init__(screen, "Bishop", f"assets/pieces/{color}/bishop.png", position, color)
+    def __init__(self, screen, position, color, id):
+        super().__init__(screen, "Bishop", f"assets/pieces/{color}/bishop.png", position, color, id)
 
     def setMoves(self, pieces):
         moves = [(1, 1), (1, -1), (-1, -1), (-1, 1)]

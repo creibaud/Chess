@@ -5,13 +5,12 @@ from src.libs.cell import Cell
 from src.tools.text import Text
 
 class Board:
-    def __init__(self, screen, color):
+    def __init__(self, screen):
         self.screen = screen
-        self.color = color
+        self.color = "white"
         self.rect = pygame.Rect(0, 0, self.screen.get_width(), self.screen.get_height())
         self.cells = []
         self.rectResize()
-        self.initCells()
 
     def initCells(self):
         gridPositions = grid.WHITE if self.color == "white" else grid.BLACK

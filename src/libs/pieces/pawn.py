@@ -1,8 +1,8 @@
 from src.libs.pieces.piece import Piece
 
 class Pawn(Piece):
-    def __init__(self, screen, position, color):
-        super().__init__(screen, "Pawn", f"assets/pieces/{color}/pawn.png", position, color)
+    def __init__(self, screen, position, color, id):
+        super().__init__(screen, "Pawn", f"assets/pieces/{color}/pawn.png", position, color, id)
         self.isFirstMove = True
     
     def setPossibleMoves(self, pieces):

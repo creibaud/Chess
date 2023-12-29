@@ -6,46 +6,77 @@ from src.libs.pieces.knight import Knight
 from src.libs.pieces.bishop import Bishop
 from src.libs.pieces.queen import Queen
 from src.libs.pieces.king import King
+from src.client.client import Client
 class Game:
-    def __init__(self, screen, colorTeam):
+    def __init__(self, screen, colorTeam="white"):
         self.screen = screen
         self.colorTeam = colorTeam
-        self.board = Board(self.screen, self.colorTeam)
+        self.board = Board(self.screen)
         self.pieceSelected = None
         self.pieces = []
         self.whitePieces = []
         self.blackPieces = []
         self.initPieces()
+        self.client = Client("localhost", 3000)
+        self.logs = []
+
+    def startClient(self):
+        name = input("Name : ")
+        self.client.setName(name)
+        self.colorTeam = input("Team : ")
+        self.client.start()
+        self.board.color = self.colorTeam
+        self.board.initCells()
 
     def initPieces(self):
         self.pieces = []
         self.whitePieces = []
 
-        for i in range(8):
-            self.whitePieces.append(Pawn(self.screen, chr(97 + i) + "2", "white"))
+        id = 0
 
-        self.whitePieces.append(Rook(self.screen, "a1", "white"))
-        self.whitePieces.append(Knight(self.screen, "b1", "white"))
-        self.whitePieces.append(Bishop(self.screen, "c1", "white"))
-        self.whitePieces.append(Queen(self.screen, "d1", "white"))
-        self.whitePieces.append(King(self.screen, "e1", "white"))
-        self.whitePieces.append(Bishop(self.screen, "f1", "white"))
-        self.whitePieces.append(Knight(self.screen, "g1", "white"))
-        self.whitePieces.append(Rook(self.screen, "h1", "white"))
+        for i in range(8):
+            self.whitePieces.append(Pawn(self.screen, chr(97 + i) + "2", "white", id))
+            id += 1
+
+        self.whitePieces.append(Rook(self.screen, "a1", "white", id))
+        id += 1
+        self.whitePieces.append(Knight(self.screen, "b1", "white", id))
+        id += 1
+        self.whitePieces.append(Bishop(self.screen, "c1", "white", id))
+        id += 1
+        self.whitePieces.append(Queen(self.screen, "d1", "white", id))
+        id += 1
+        self.whitePieces.append(King(self.screen, "e1", "white", id))
+        id += 1
+        self.whitePieces.append(Bishop(self.screen, "f1", "white", id))
+        id += 1
+        self.whitePieces.append(Knight(self.screen, "g1", "white", id))
+        id += 1
+        self.whitePieces.append(Rook(self.screen, "h1", "white", id))
+        id += 1
         
         self.blackPieces = []
 
         for i in range(8):
-            self.blackPieces.append(Pawn(self.screen, chr(97 + i) + "7", "black"))
+            self.blackPieces.append(Pawn(self.screen, chr(97 + i) + "7", "black", id))
+            id += 1
 
-        self.blackPieces.append(Rook(self.screen, "a8", "black"))
-        self.blackPieces.append(Knight(self.screen, "b8", "black"))
-        self.blackPieces.append(Bishop(self.screen, "c8", "black"))
-        self.blackPieces.append(Queen(self.screen, "d8", "black"))
-        self.blackPieces.append(King(self.screen, "e8", "black"))
-        self.blackPieces.append(Bishop(self.screen, "f8", "black"))
-        self.blackPieces.append(Knight(self.screen, "g8", "black"))
-        self.blackPieces.append(Rook(self.screen, "h8", "black"))
+        self.blackPieces.append(Rook(self.screen, "a8", "black", id))
+        id += 1
+        self.blackPieces.append(Knight(self.screen, "b8", "black", id))
+        id += 1
+        self.blackPieces.append(Bishop(self.screen, "c8", "black", id))
+        id += 1
+        self.blackPieces.append(Queen(self.screen, "d8", "black", id))
+        id += 1
+        self.blackPieces.append(King(self.screen, "e8", "black", id))
+        id += 1
+        self.blackPieces.append(Bishop(self.screen, "f8", "black", id))
+        id += 1
+        self.blackPieces.append(Knight(self.screen, "g8", "black", id))
+        id += 1
+        self.blackPieces.append(Rook(self.screen, "h8", "black", id))
+        id += 1
 
         self.pieces.append(self.whitePieces)
         self.pieces.append(self.blackPieces)
@@ -95,6 +126,7 @@ class Game:
                             if self.pieceSelected.name == "Pawn" and self.pieceSelected.isFirstMove:
                                 self.pieceSelected.isFirstMove = False
 
+                            self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
                             self.pieceSelected = None
                         elif cell.position in self.pieceSelected.attackMoves:
                             for colorTeam in self.pieces:
@@ -103,11 +135,32 @@ class Game:
                                         colorTeam.remove(piece)
                                         break
                             self.pieceSelected.position = cell.position
+                            self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
                             self.pieceSelected = None
                         elif cell.position not in self.pieceSelected.possibleMoves and cell.position not in self.pieceSelected.attackMoves and cell.position != self.pieceSelected.position:
                             self.pieceSelected = None
 
     def update(self):
+        if len(self.logs) < len(self.client.enemyMoves):
+            log = self.client.enemyMoves[-1]
+            id, position = log.split(":")
+            self.logs.append(log)
+
+            teamColor = 0 if self.colorTeam == "white" else 1
+            enemyColor = 1 if self.colorTeam == "white" else 0
+            for enemyPiece in self.pieces[enemyColor]:
+                if enemyPiece.id == int(id):
+                    enemyPiece.position = position
+
+                    for teamPiece in self.pieces[teamColor]:
+                        if teamPiece.position == position:
+                            self.pieces[teamColor].remove(teamPiece)
+                            break
+
+                    if enemyPiece.name == "Pawn" and enemyPiece.isFirstMove:
+                        enemyPiece.isFirstMove = False
+                    break
+        
         for colorTeam in self.pieces:
             for piece in colorTeam:
                 piece.positionPiece(self.board.cells)
