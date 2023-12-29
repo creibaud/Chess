@@ -124,27 +124,73 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     if cell.rect.collidepoint(mousePos) and self.pieceSelected is not None:
                         if cell.position in self.pieceSelected.possibleMoves and self.yourTurn:
+                            oldPos = self.pieceSelected.position
                             self.pieceSelected.position = cell.position
-                            if self.pieceSelected.name == "Pawn" and self.pieceSelected.isFirstMove:
-                                self.pieceSelected.isFirstMove = False
 
-                            self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
-                            self.pieceSelected = None
-                            self.yourTurn = False
+                            if self.isCheck():
+                                self.pieceSelected.position = oldPos
+                                self.pieceSelected = None
+                            else:
+                                if self.pieceSelected.name == "Pawn" and self.pieceSelected.isFirstMove:
+                                    self.pieceSelected.isFirstMove = False
+
+                                self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
+                                self.pieceSelected = None
+                                self.yourTurn = False
                         elif cell.position in self.pieceSelected.attackMoves and self.yourTurn:
+                            oldPos = self.pieceSelected.position
+                            oldPiece = None
                             for colorTeam in self.pieces:
                                 for piece in colorTeam:
                                     if piece.position == cell.position:
+                                        oldPiece = piece
                                         colorTeam.remove(piece)
                                         break
                                     
                             self.pieceSelected.position = cell.position
-                            self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
-                            self.pieceSelected = None
-                            self.yourTurn = False
+
+                            if self.isCheck():
+                                self.pieceSelected.position = oldPos
+                                self.pieceSelected = None
+                                oldPiece.position = cell.position
+                                color = 0 if oldPiece.color == "white" else 1
+                                self.pieces[color].append(oldPiece)
+                            else:
+                                self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
+                                self.pieceSelected = None
+                                self.yourTurn = False
                         elif cell.position not in self.pieceSelected.possibleMoves and cell.position not in self.pieceSelected.attackMoves and cell.position != self.pieceSelected.position:
                             self.pieceSelected = None
 
+    def isCheck(self):
+        king = None
+        for colorTeam in self.pieces:
+            for piece in colorTeam:
+                if piece.name == "King" and piece.color == self.colorTeam:
+                    king = piece
+                    break
+
+        for colorTeam in self.pieces:
+            for piece in colorTeam:
+                if piece.color != self.colorTeam:
+                    piece.setMoves(self.pieces)
+                    if king.position in piece.attackMoves:
+                        return True
+        return False
+    
+    def isCheckMate(self):
+        king = None
+        for colorTeam in self.pieces:
+            for piece in colorTeam:
+                if piece.name == "King" and piece.color == self.colorTeam:
+                    king = piece
+                    break
+
+        king.setMoves(self.pieces)
+        if len(king.possibleMoves) == 0 and self.isCheck():
+            return True
+        return False
+    
     def update(self):
         if len(self.logs) < len(self.client.enemyMoves):
             log = self.client.enemyMoves[-1]
