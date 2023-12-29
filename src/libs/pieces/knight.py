@@ -12,7 +12,6 @@ class Knight(Piece):
 
         for dx, dy in moves:
             move = chr(ord(self.position[0]) + dx) + str(int(self.position[1]) + dy)
-            print(move)
             if self.moveIsAttackable(move, pieces):
                 self.attackMoves.append(move)
 

@@ -137,6 +137,7 @@ class Game:
                                     if piece.position == cell.position:
                                         colorTeam.remove(piece)
                                         break
+                                    
                             self.pieceSelected.position = cell.position
                             self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
                             self.pieceSelected = None
