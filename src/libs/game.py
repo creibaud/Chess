@@ -19,11 +19,13 @@ class Game:
         self.initPieces()
         self.client = Client("localhost", 3000)
         self.logs = []
+        self.yourTurn = False
 
     def startClient(self):
         name = input("Name : ")
         self.client.setName(name)
         self.colorTeam = input("Team : ")
+        self.yourTurn = True if self.colorTeam == "white" else False
         self.client.start()
         self.board.color = self.colorTeam
         self.board.initCells()
@@ -121,14 +123,15 @@ class Game:
                 cell = self.board.cells[row][col]
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     if cell.rect.collidepoint(mousePos) and self.pieceSelected is not None:
-                        if cell.position in self.pieceSelected.possibleMoves:
+                        if cell.position in self.pieceSelected.possibleMoves and self.yourTurn:
                             self.pieceSelected.position = cell.position
                             if self.pieceSelected.name == "Pawn" and self.pieceSelected.isFirstMove:
                                 self.pieceSelected.isFirstMove = False
 
                             self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
                             self.pieceSelected = None
-                        elif cell.position in self.pieceSelected.attackMoves:
+                            self.yourTurn = False
+                        elif cell.position in self.pieceSelected.attackMoves and self.yourTurn:
                             for colorTeam in self.pieces:
                                 for piece in colorTeam:
                                     if piece.position == cell.position:
@@ -137,6 +140,7 @@ class Game:
                             self.pieceSelected.position = cell.position
                             self.client.sendPosition(self.pieceSelected.id, self.pieceSelected.position)
                             self.pieceSelected = None
+                            self.yourTurn = False
                         elif cell.position not in self.pieceSelected.possibleMoves and cell.position not in self.pieceSelected.attackMoves and cell.position != self.pieceSelected.position:
                             self.pieceSelected = None
 
@@ -160,6 +164,8 @@ class Game:
                     if enemyPiece.name == "Pawn" and enemyPiece.isFirstMove:
                         enemyPiece.isFirstMove = False
                     break
+            
+            self.yourTurn = True
         
         for colorTeam in self.pieces:
             for piece in colorTeam:
