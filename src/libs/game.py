@@ -78,8 +78,7 @@ class Game:
                     else:
                         self.pieceSelected = piece
                         piece.getCell(self.board.cells).active = True
-                        self.pieceSelected.setPossibleMoves(self.pieces)
-                        self.pieceSelected.setAttackMoves(self.pieces)
+                        self.pieceSelected.setMoves(self.pieces)
                 else:
                     piece.getCell(self.board.cells).active = False
     

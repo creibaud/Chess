@@ -31,24 +31,7 @@ class Pawn(Piece):
             move = chr(ord(self.position[0]) + dx) + str(int(self.position[1]) + dy)
             if self.moveIsAttackable(move, pieces):
                 self.attackMoves.append(move)
-
-    def moveIsPossible(self, move, pieces):
-        if move[0] not in "abcdefgh" or int(move[1]) not in range(1, 9):
-            return False
-
-        for colorTeam in pieces:
-            for piece in colorTeam:
-                if piece.position == move:
-                    return False
-        return True
     
-    def moveIsAttackable(self, move, pieces):
-        if move[0] not in "abcdefgh" or int(move[1]) not in range(1, 9):
-            return False
-
-        enemyTeam = 1 if self.color == "white" else 0
-
-        for piece in pieces[enemyTeam]:
-            if piece.position == move:
-                return True
-        return False
+    def setMoves(self, pieces):
+        self.setPossibleMoves(pieces)
+        self.setAttackMoves(pieces)
