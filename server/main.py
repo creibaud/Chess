@@ -1,4 +1,6 @@
 from server import Server
 
-server = Server("tcp://7.tcp.eu.ngrok.io", 11611)
+host = str(input("Enter the host: "))
+port = int(input("Enter the port: "))
+server = Server(host, port)
 server.start()

@@ -17,7 +17,9 @@ class Game:
         self.whitePieces = []
         self.blackPieces = []
         self.initPieces()
-        self.client = Client("tcp://7.tcp.eu.ngrok.io", 11611)
+        host = str(input("Enter the host: "))
+        port = int(input("Enter the port: "))
+        self.client = Client(host, port)
         self.logs = []
         self.yourTurn = False
 
